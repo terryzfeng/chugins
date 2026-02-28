@@ -5,7 +5,6 @@
 #--------------------------------------------------------------
 
 # need to move and rename the built .chug file
-cp build/WarpBuf.chug/Contents/MacOS/WarpBuf ./WarpBuf.chug
 CHUGIN=./WarpBuf.chug
 
 # codesign Line.chug

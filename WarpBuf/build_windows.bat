@@ -12,4 +12,4 @@ if not exist "thirdparty/libsndfile-1.2.0-win64/" (
 
 cmake -Bbuild . -DCMAKE_VERBOSE_MAKEFILE=ON -G "Visual Studio 17 2022" -A "x64"
 cmake --build build --config Release
-rem cmake --build build --config Release --target install
+cmake --build build --config Release --target install

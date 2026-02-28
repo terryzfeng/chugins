@@ -20,56 +20,59 @@ jobs:
       matrix:
         include:
           - name: ubuntu-x86_64
-            os: ubuntu-20.04
+            os: ubuntu-latest
+            rule: linux
           - name: macos-x86_64
-            os: macos-11
+            os: macos-latest
+            rule: mac
           - name: win64
-            os: windows-2022
+            os: windows-latest
+            rule: win32
+          - name: web
+            os: ubuntu-latest
+            rule: web
 
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         submodules: true
 
+    - name: Setup emsdk
+      if: matrix.rule == 'web'
+      uses: mymindstorm/setup-emsdk@v14
+      with:
+        version: 3.1.61
+        actions-cache-folder: 'emsdk-cache'
+
     - name: Install dependencies Ubuntu
-      if: startsWith(matrix.os, 'ubuntu')
+      if: matrix.rule == 'linux'
       run: |
         sudo apt install autoconf autogen automake build-essential libasound2-dev \
         libflac-dev libogg-dev libtool libvorbis-dev libopus-dev libmp3lame-dev \
-        libmpg123-dev pkg-config python
+        libmpg123-dev pkg-config python3
 
     - name: Install dependencies macOS
-      if: startsWith(matrix.os, 'macos')
+      if: matrix.rule == 'mac'
       run: |
         brew install autoconf autogen automake flac libogg libtool libvorbis opus mpg123 pkg-config
 
-    - name: Install dependencies Windows
-      if: startsWith(matrix.os, 'windows')
-      run: |
-        cd WarpBuf/thirdparty
-        curl -OL https://github.com/libsndfile/libsndfile/releases/download/1.2.0/libsndfile-1.2.0-win64.zip
-        7z x libsndfile-1.2.0-win64.zip -y
-        rm libsndfile-1.2.0-win64.zip
-
-    - name: Build Libsndfile
-      if: startsWith(matrix.os, 'macos') || startsWith(matrix.os, 'ubuntu')
-      run: |
-        cd WarpBuf/thirdparty/libsndfile
-        cmake -Bbuild -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_C_FLAGS="-fPIC" -DCMAKE_CXX_FLAGS="-fPIC" -DBUILD_TESTING=OFF -DCMAKE_INSTALL_PREFIX="./install"
-        cmake --build build --config Release
-        cmake --build build --target install
-
-    - name: Build WarpBuf Release
+    - name: make
       run: |
         cd WarpBuf
-        cmake -Bbuild -DCMAKE_VERBOSE_MAKEFILE=ON
-        cmake --build build --config Release
-        cmake --build build --config Release --target install
+        make ${{ matrix.rule }}
 
-    - uses: actions/upload-artifact@v3
-      with:
-        name: warpbuf-${{ matrix.name }}.zip
-        path: "WarpBuf/package/warpbuf-${{ env.WARPBUF_VERSION }}"
-        if-no-files-found: error
+    # - uses: actions/upload-artifact@v4
+    #   if: matrix.rule != 'web'
+    #   with:
+    #     name: warpbuf-${{ matrix.name }}.zip
+    #     path: "WarpBuf/package/warpbuf-${{ env.WARPBUF_VERSION }}"
+    #     if-no-files-found: error
+
+    # - uses: actions/upload-artifact@v4
+    #   if: matrix.rule == 'web'
+    #   with:
+    #     name: warpbuf-${{ matrix.name }}.zip
+    #     path: "WarpBuf/WarpBuf.chug.wasm"
+    #     if-no-files-found: error
