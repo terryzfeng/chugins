@@ -183,11 +183,6 @@ if (MSVC)
                         VS_DEBUGGER_COMMAND "C:\\Program\ Files\ (x86)\\ChucK\\bin\\chuck.exe"
                         VS_DEBUGGER_COMMAND_ARGUMENTS "..\\tests\\warpbuf_basic.ck")
 
-  add_custom_command(TARGET ${PROJECT_NAME}
-                     POST_BUILD
-                     COMMAND ${CMAKE_COMMAND} -E copy_if_different
-                     "$<TARGET_FILE:WarpBuf>"
-                     "%USERPROFILE%/Documents/ChucK/chugins/WarpBuf.chug")
 endif()
 
 if (WIN32)

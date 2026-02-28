@@ -13,3 +13,6 @@ if not exist "thirdparty/libsndfile-1.2.0-win64/" (
 cmake -Bbuild . -DCMAKE_VERBOSE_MAKEFILE=ON -G "Visual Studio 17 2022" -A "x64"
 cmake --build build --config Release
 cmake --build build --config Release --target install
+
+rem Copy built chugin to current directory
+copy /Y build\Release\WarpBuf.chug .

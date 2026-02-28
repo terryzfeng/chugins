@@ -19,10 +19,10 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: ubuntu-x86_64
+          - name: ubuntu
             os: ubuntu-latest
             rule: linux
-          - name: macos-x86_64
+          - name: macos
             os: macos-latest
             rule: mac
           - name: win64
