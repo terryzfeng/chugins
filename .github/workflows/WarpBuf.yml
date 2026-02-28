@@ -39,6 +39,11 @@ jobs:
       with:
         submodules: true
 
+    - name: Set permissions
+      run: |
+        chmod +x WarpBuf/build_unix.sh
+        chmod +x WarpBuf/build_windows.bat
+
     - name: Setup emsdk
       if: matrix.rule == 'web'
       uses: mymindstorm/setup-emsdk@v14
