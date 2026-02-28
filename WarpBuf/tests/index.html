@@ -1,0 +1,39 @@
+<html>
+
+<head>
+  <script type="module" defer>
+    import { Chuck } from 'https://cdn.jsdelivr.net/npm/webchuck/+esm';
+
+    let theChuck; // global variable
+
+    document.getElementById('action').addEventListener('click', async () => {
+      // Initialize default ChucK object
+      if (theChuck === undefined) {
+        Chuck.loadChugin("./WarpBuf.chug.wasm");
+        theChuck = await Chuck.init([{
+          serverFilename: "./assets/1375__sleep__90-bpm-nylon2.wav",
+          virtualFilename: "1375__sleep__90-bpm-nylon2.wav"
+        }]);
+      }
+      const code = document.getElementById("code").innerText;
+      // Run ChucK code
+      theChuck.runCode(code);
+    });
+  </script>
+</head>
+
+<body>
+  <h1>WarpBuf WebChugin Test</h1>
+  <code id="code">
+WarpBuf buf => dac;
+buf.read("1375__sleep__90-bpm-nylon2.wav");
+buf.bpm(100);
+buf.transpose(-2);
+10::second => now;
+    </code>
+  <br>
+  <br>
+  <button id="action">Start and Play</button>
+</body>
+
+</html>

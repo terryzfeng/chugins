@@ -62,6 +62,12 @@ brew install autoconf autogen automake flac libogg libtool libvorbis opus mpg123
 
 In `chugins/WarpBuf`, open a Terminal window and run `sh build_unix.sh`. The `WarpBuf.chug` should appear inside `chugins/WarpBuf/package`.
 
+### Web
+
+Run `make web` to build WarpBuf as a webchugin (`.chug.wasm`).
+
+Run `make test-web` to open a webserver and test the chugin in the browser.
+
 ## Testing
 
 Run any of the test scripts: `chuck.exe --verbose:10 level:10 "tests/warpbuf_basic.ck"`.
@@ -74,3 +80,4 @@ WarpBuf uses [Rubber Band Library](https://github.com/breakfastquay/rubberband/)
 
 * Get/set the list of warp markers.
 * Optionally pre-read the entire audio buffer and hold it in a buffer.
+* Support reading audio files whose sample rate don't match ChucK's internal sample rate.
